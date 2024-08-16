@@ -78,6 +78,11 @@ const Dashboard = () => {
             start: new Date(2024, 7, 13, 17, 0),
             end: new Date(2024, 7, 13, 18, 0),
         },
+        {
+            title: 'Conference',
+            start: new Date(2024, 7, 14, 17, 0),
+            end: new Date(2024, 7, 14, 18, 0),
+        },
     ];
 
     return (

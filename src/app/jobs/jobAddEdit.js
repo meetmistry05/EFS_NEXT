@@ -1,15 +1,23 @@
 "use client";
 import { Button } from "primereact/button";
 import { InputTextarea } from "primereact/inputtextarea";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TextBoxComponent from "../components/shared/sharedUI/textBox.component";
 import { labelConstants } from "../utilities/constants/combine.constant";
+import DropdownList from "../components/shared/sharedUI/dropDownList.component";
+import BuildingDropdown from "../components/shared/Dropdowns/buildingsDropdown";
+import JobTypeDropdown from "../components/shared/Dropdowns/jobTypeDropdown";
+import { Calendar } from "primereact/calendar";
+import BuildingAddEdit from "../buildings/buildingAddEditDialog";
+import { setShowBuilding } from "@/redux/slices/building/building.slice";
 
 
 export const JobAddEdit = ({ id = '' }) => {
     const dispatch = useDispatch();
     const reduxState = useSelector((state) => state?.job);
+
+    const [selectedBuilding, setSelectedBuilding] = useState(null);
 
 
     useEffect(() => {
@@ -19,8 +27,13 @@ export const JobAddEdit = ({ id = '' }) => {
 
     }, [reduxState?.error, reduxState?.isSuccess]);
 
+    const addBuilding = () => {
+dispatch(setShowBuilding(true))
+    }
+
     return (
         <>
+        <BuildingAddEdit />
             <div className="row">
                 <div className="col-lg-6">
                     <div className='card'>
@@ -50,11 +63,7 @@ export const JobAddEdit = ({ id = '' }) => {
                                 </div>
                                 <div className="col-lg-6 mb-3">
                                     <lable className="form-label required">Job Type</lable>
-                                    <TextBoxComponent
-                                        type="text"
-                                        value=""
-                                        placeholder={"PPM..."}
-                                    />
+                                    <JobTypeDropdown selectedJobType={null}/>
                                 </div>
                                 <div className="col-lg-6 mb-3">
                                     <lable className="form-label required">Certificate Reference</lable>
@@ -82,11 +91,7 @@ export const JobAddEdit = ({ id = '' }) => {
                                 </div>
                                 <div className="col-lg-6 mb-3">
                                     <lable className="form-label required">Inspection Date</lable>
-                                    <TextBoxComponent
-                                        type="text"
-                                        value=""
-                                        placeholder={"PPM..."}
-                                    />
+                                    <Calendar value='' showButtonBar className="w-100" placeholder="Inspection Date" showIcon />
                                 </div>
                                 <div className="col-lg-6 mb-3">
                                     <lable className="form-label required">Working Hours</lable>
@@ -98,19 +103,11 @@ export const JobAddEdit = ({ id = '' }) => {
                                 </div>
                                 <div className="col-lg-6 mb-3">
                                     <lable className="form-label required">Job Start Date</lable>
-                                    <TextBoxComponent
-                                        type="text"
-                                        value=""
-                                        placeholder={"PPM..."}
-                                    />
+                                    <Calendar value='' showButtonBar className="w-100" placeholder="Job Start Date" showIcon />
                                 </div>
                                 <div className="col-lg-6 mb-3">
                                     <lable className="form-label required">Job End Date</lable>
-                                    <TextBoxComponent
-                                        type="text"
-                                        value=""
-                                        placeholder={"PPM..."}
-                                    />
+                                    <Calendar value='' showButtonBar className="w-100" placeholder="Job End Date" showIcon />
                                 </div>
                                 <div className="col-lg-12 mb-3">
                                     <label>Note</label>
@@ -129,14 +126,14 @@ export const JobAddEdit = ({ id = '' }) => {
                             <div className="row align-items-center">
                                 <div className="col-lg-11 col-xl-9 mb-3">
                                     <lable className="form-label required">Assign Building</lable>
-                                    <TextBoxComponent
-                                        type="text"
-                                        value=""
-                                        placeholder={"PPM..."}
-                                    />
+                                    <BuildingDropdown selectedBuilding={selectedBuilding} onChange={setSelectedBuilding} />
                                 </div>
                                 <div className="col-lg-11 col-xl-3 text-end col-borer">
-                                    <Button type="button" className="btn btn-primary col-12" label="Add Building" />
+                                    <Button 
+                                    type="button" 
+                                    className="btn btn-primary col-12" 
+                                    label="Add Building" 
+                                    onClick={addBuilding}/>
                                 </div>
                             </div>
                         </div>

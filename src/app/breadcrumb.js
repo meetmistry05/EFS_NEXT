@@ -6,6 +6,8 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { routeConstants } from './utilities/constants/combine.constant';
+import { Button } from 'primereact/button';
+import { useRouter } from 'next/navigation';
 
 const Breadcrunb = () => {
 
@@ -15,6 +17,8 @@ const Breadcrunb = () => {
     const [breadCrumbs, setBreadCrumbs] = useState([]);
 
     const pathname = usePathname();
+
+    const router = useRouter();
 
     useEffect(() => {
         renderBreadCrunbs();
@@ -287,6 +291,10 @@ const Breadcrunb = () => {
         }
     };
 
+    const navigate = (path = '') => {
+        router.push(path)
+    }
+
     const renderButton = () => {
         let label = '';
         let showBackButton = false;
@@ -299,7 +307,7 @@ const Breadcrunb = () => {
         }
 
         if (label) {
-            return <Link className='btn btn-primary' href={href}><>{icon}{label}</></Link>
+            return <Button type='button' className='btn btn-primary' onClick={() => navigate(href)} icon={icon} label={label} />
         }
     }
 

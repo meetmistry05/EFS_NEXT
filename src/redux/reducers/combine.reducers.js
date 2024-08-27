@@ -4,10 +4,12 @@ import { combineReducers } from "@reduxjs/toolkit";
 //REFERENCES
 import auth from "../slices/auth/auth.slice";
 import jobSlice from "../slices/job/job.slice";
+import buildingSlice from "../slices/building/building.slice";
 
 const appReducer = combineReducers({
   auth: auth,
-  job: jobSlice
+  job: jobSlice,
+  building: buildingSlice
   // facilityManagers: facilityManagersReducer,
   // categorySettings: categorySettingReducer,
   // defectSubCategory: defectSubCategoryReducer,

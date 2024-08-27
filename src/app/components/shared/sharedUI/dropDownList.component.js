@@ -22,12 +22,12 @@ function DropdownList({
                 id={id}
                 dataKey={dataKey}
                 value={value}
-                className={`form-select col-lg-12 ${className}`}
+                className={`col-lg-12 ${className}`}
                 options={options}
                 onChange={onChange}
                 disabled={disabled}
                 name={name}
-                emptyMessage={emptyMessage ? emptyMessage :'No results found' }
+                emptyMessage={emptyMessage ? emptyMessage :'No data found' }
                 optionLabel={optionLabel}
                 optionValue={optionValue}
                 placeholder={placeholder}

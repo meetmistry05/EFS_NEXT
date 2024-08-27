@@ -5,30 +5,32 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 //REFERENCES
 
-import { GET_JOBS } from "../../../app/components/graphql/Queries/Jobs/jobQueries.js";
-
 import client from "../../../app/components/graphql/apolloClient";
+import { GET_BUILDINGS } from "@/app/components/graphql/Queries/Buildings/buildingQueries";
 
 const initialState = {
     loading: false,
     isSuccess: false,
     error: null,
-    jobs: null,
+    buildings: [],
+    dropdownBuildings: [],
     pageNumber: null,
     pageSize: null,
     sortOrder: null,
     sortField: null,
     filterValue: '',
-    totalRecords: 0
+    totalRecords: 0,
+    showBuilding: false
 };
 
-export const getJobs = createAsyncThunk("job/getJobs", async (params, { rejectWithValue }) => {
+export const getBuildings = createAsyncThunk("job/getBuildings", async (params, { rejectWithValue }) => {
     try {
         const { data } = await client.query({
-            query: GET_JOBS,
+            query: GET_BUILDINGS,
             variables: params
         });
-        return data.getJobsList;
+        
+        return data.getBuildingsList;
 
     } catch (error) {
         return rejectWithValue(error.message);
@@ -37,31 +39,38 @@ export const getJobs = createAsyncThunk("job/getJobs", async (params, { rejectWi
 
 
 
-const jobSlice = createSlice({
-    name: "job",
+const buildingSlice = createSlice({
+    name: "building",
     initialState,
     reducers: {
-
+        setShowBuilding: (state, action) => {
+            state.showBuilding = action.payload;
+          },
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getJobs.pending, (state, { action }) => {
+            .addCase(getBuildings.pending, (state, { action }) => {
                 state.loading = true;
                 state.isSuccess = false;
                 state.error = null;
             })
-            .addCase(getJobs.fulfilled, (state, { payload, meta }) => {
+            .addCase(getBuildings.fulfilled, (state, { payload, meta }) => {
                 if (payload.statusCode === 200) {
                     state.isSuccess = true;
                     state.loading = false;
-                    state.jobs = payload.data.jobsData;
+                    if(meta.arg.isDropdown){
+                        state.dropdownBuildings = payload.data.buildingsData;
+                    }
+                    else {
+                        state.buildings = payload.data.buildingsData;
+                    }
                     state.totalRecords = payload.data.paginationData.totalRecords
                 } else {
                     state.loading = false;
                     state.error = payload.message;
                 }
             })
-            .addCase(getJobs.rejected, (state, action) => {
+            .addCase(getBuildings.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message;
                 state.isSuccess = false;
@@ -69,6 +78,6 @@ const jobSlice = createSlice({
     },
 });
 
-//export const { resetUserForgotPasswordState, resetUserResetPasswordState, userLogout, setAuthenticatedUser } = authSlice.actions;
+export const { setShowBuilding } = buildingSlice.actions;
 
-export default jobSlice.reducer;
+export default buildingSlice.reducer;

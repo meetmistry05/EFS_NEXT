@@ -522,3 +522,27 @@ ol,
 ul {
   padding-left: 0 !important;
 }
+
+.p-dropdown-item.p-focus, td.p-datepicker-today > span, .p-datepicker:not(.p-disabled) table td span:not(.p-highlight):not(.p-disabled):hover {
+  background: #dd693924 !important;
+}
+
+.p-button:hover {
+  cursor: pointer !important;
+}
+
+.p-datepicker-trigger.p-button {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.p-dialog-header, .p-dialog-header-icons {
+  background: #dd6939 !important;
+  color: whitesmoke !important;
+}
+
+.p-dialog .p-dialog-header .p-dialog-header-icon,.p-dialog .p-dialog-header .p-dialog-header-icon:enabled:hover {
+  color: white;
+  border-color: transparent;
+  background: transparent;
+}

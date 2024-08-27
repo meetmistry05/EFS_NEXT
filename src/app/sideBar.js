@@ -18,7 +18,7 @@ const SideBarCustom = styled.div`
 width: ${(props) => (props.isopen ? '200px' : !props.issidebarfocuslost && window.innerWidth >= 768 ? '200px' : '70px')};
   transition: width 0.3s;
     overflow: hidden;
-    background: rgb(39 44 72);
+    background-image: linear-gradient(195deg, #42424a, #191919);
     display: flex;
     flex-direction: column;
     position: ${(props) => ((props.isopen || props.issidebarfocuslost) && window.innerWidth >= 768 ? 'relative' : 'absolute')};

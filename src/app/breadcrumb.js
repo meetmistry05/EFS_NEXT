@@ -287,6 +287,22 @@ const Breadcrunb = () => {
         }
     };
 
+    const renderButton = () => {
+        let label = '';
+        let showBackButton = false;
+        let icon = <i className='pi pi-plus me-1' />;
+        let href = '';
+
+        if (pathname === routeConstants.JOBS) {
+            label = "Create Job";
+            href = routeConstants.ADMINISTRATION_JOBS_CREATE;
+        }
+
+        if (label) {
+            return <Link className='btn btn-primary' href={href}><>{icon}{label}</></Link>
+        }
+    }
+
     return (
         <>
             <ul className='breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1'>
@@ -300,7 +316,7 @@ const Breadcrunb = () => {
                     >
                         {item.isSeparator ? (
                             <>
-                                <Link className='text-primary text-hover-primary' href={item.path}>
+                                <Link className='text-link text-hover-primary' href={item.path}>
                                     {item.title}
                                 </Link>
                                 <span className='text-muted px-3'><i className='pi pi-angle-right'></i></span>
@@ -311,6 +327,7 @@ const Breadcrunb = () => {
                     </li>
                 ))}
             </ul>
+            {renderButton()}
         </>
     );
 };

@@ -1,6 +1,5 @@
 "use client"
-
-import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
+import { faBriefcase, faBuilding, faFile, faUserGear } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Chart } from "primereact/chart";
 import { useEffect, useState } from "react";
@@ -14,10 +13,10 @@ const Dashboard = () => {
     useEffect(() => {
         const documentStyle = getComputedStyle(document.documentElement);
         const data = {
-            labels: ['Jobs', 'Assets', 'Buildings', 'Operatives', 'Reports'],
+            labels: ['Logged', 'Assigned', 'Scheduled', 'Signed Off', 'Closed'],
             datasets: [
                 {
-                    data: [65, 212, 106, 17, 213],
+                    data: [3, 7, 41, 9, 5],
                     backgroundColor: [
                         documentStyle.getPropertyValue('--blue-500'),
                         documentStyle.getPropertyValue('--yellow-500'),
@@ -88,74 +87,90 @@ const Dashboard = () => {
     return (
         <>
             <div className="row">
-                <div className="col-lg-3 mb-3">
-                    <div className="dasboard-card">
-                        <div className="d-flex justify-content-between align-items-center">
-                            <div className="card dashboard-subcard">
-                                <div className="card-body p-2 px-3">
-                                    <FontAwesomeIcon icon={faBriefcase} style={{ height: '3rem' }} className="" />
-                                </div>
+                <div className="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                    <div className="card">
+                        <div className="card-header p-3 pt-2">
+                            <div className="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
+                                <FontAwesomeIcon icon={faBriefcase} style={{ height: '2rem', marginTop: '10px' }} className="material-icons opacity-10" />
                             </div>
-
-                            <div class="">
-                                <h6 class="dashboard-subcard p-2 pe-5 ">Total Jobs <i className="ms-1 pi pi-arrow-right" /></h6>
+                            <div className="text-end pt-1">
+                                <div className="text-sm ">Total Jobs</div>
+                                <h4 className="mb-0 fw-bold">53</h4>
                             </div>
-                            <div class="">
-                                <h3 class="dashboard-subcard p-2 ">33</h3>
-                            </div>
+                        </div>
+                        <hr className="dark horizontal my-0" />
+                        <div className="card-footer p-3">
+                            <p className="mb-0"><span className="text-success text-sm fw-bolder">+55% </span>than last week</p>
                         </div>
                     </div>
                 </div>
-                <div className="col-lg-3 mb-3">
-                    <div className="dasboard-card">
-                        <div className="d-flex justify-content-between align-items-center">
-                            <div className="card dashboard-subcard">
-                                <div className="card-body p-2 px-3">
-                                    <FontAwesomeIcon icon={faBriefcase} style={{ height: '3rem' }} className="" />
-                                </div>
+                <div className="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                    <div className="card">
+                        <div className="card-header p-3 pt-2">
+                            <div className="icon icon-lg icon-shape bg-gradient-warning shadow-dark text-center border-radius-xl mt-n4 position-absolute">
+                                <FontAwesomeIcon icon={faBuilding} style={{ height: '2rem', marginTop: '10px' }} className="material-icons opacity-10" />
                             </div>
-
-                            <div class="">
-                                <h6 class="dashboard-subcard p-2 pe-5 ">Total Buildings <i className="ms-1 pi pi-arrow-right" /></h6>
+                            <div className="text-end pt-1">
+                                <div className="text-sm ">Total Buildings</div>
+                                <h4 className="mb-0 fw-bold">53</h4>
                             </div>
-                            <div class="">
-                                <h3 class="dashboard-subcard p-2 ">33</h3>
-                            </div>
+                        </div>
+                        <hr className="dark horizontal my-0" />
+                        <div className="card-footer p-3">
+                            <p className="mb-0"><span className="text-success text-sm fw-bolder">+55% </span>than last week</p>
                         </div>
                     </div>
                 </div>
-                <div className="col-lg-3 mb-3">
-                    <div className="dasboard-card">
-                        <div className="d-flex justify-content-between align-items-center">
-                            <div className="card dashboard-subcard">
-                                <div className="card-body p-2 px-3">
-                                    <FontAwesomeIcon icon={faBriefcase} style={{ height: '3rem' }} className="" />
-                                </div>
+                <div className="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                    <div className="card">
+                        <div className="card-header p-3 pt-2">
+                            <div className="icon icon-lg icon-shape bg-gradient-info shadow-dark text-center border-radius-xl mt-n4 position-absolute">
+                                <FontAwesomeIcon icon={faUserGear} style={{ height: '2rem', marginTop: '10px' }} className="material-icons opacity-10" />
                             </div>
-
-                            <div class="">
-                                <h6 class="dashboard-subcard p-2 pe-5 ">Total Defects <i className="ms-1 pi pi-arrow-right" /></h6>
+                            <div className="text-end pt-1">
+                                <div className="text-sm">Total Operatives</div>
+                                <h4 className="mb-0 fw-bold">53</h4>
                             </div>
-                            <div class="">
-                                <h3 class="dashboard-subcard p-2 ">33</h3>
+                        </div>
+                        <hr className="dark horizontal my-0" />
+                        <div className="card-footer p-3">
+                            <p className="mb-0"><span className="text-success text-sm fw-bolder">+55% </span>than last week</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                    <div className="card">
+                        <div className="card-header p-3 pt-2">
+                            <div className="icon icon-lg icon-shape bg-gradient-success shadow-dark text-center border-radius-xl mt-n4 position-absolute">
+                                <FontAwesomeIcon icon={faFile} style={{ height: '2rem', marginTop: '10px' }} className="material-icons opacity-10" />
                             </div>
+                            <div className="text-end pt-1">
+                                <div className="text-sm ">Total Reports</div>
+                                <h4 className="mb-0 fw-bold">53</h4>
+                            </div>
+                        </div>
+                        <hr className="dark horizontal my-0" />
+                        <div className="card-footer p-3">
+                            <p className="mb-0"><span className="text-success text-sm fw-bolder">+55% </span>than last week</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div className="row align-items-center">
-                <div className="col-lg-4 mb-3">
-                    <div className="card mt-5">
-                        <div className="card-body dashboard-subcard">
-                            <Chart type="polarArea" data={chartData} options={chartOptions} className="w-full md:w-30rem d-flex justify-content-center" height="450px" />
-                        </div>
-                    </div>
-                </div>
                 <div className="col-lg-8 mb-3">
                     <div className="card mt-3">
                         <div className="card-body dashboard-subcard">
                             <CalendarView events={events} />
+                        </div>
+                    </div>
+                </div>
+                <div className="col-lg-4 mb-3">
+                    <div className="card mt-3">
+                        <div className="card-body dashboard-subcard">
+                            <h6 class="mb-0 fw-bold text-muted">Jobs Status</h6>
+                            <hr />
+                            <Chart type="pie" data={chartData} options={chartOptions} className="w-full md:w-30rem d-flex justify-content-center" height="450px" />
                         </div>
                     </div>
                 </div>

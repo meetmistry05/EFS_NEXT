@@ -30,6 +30,7 @@ function AppLayout({ children }) {
   const reduxState = useSelector((state) => state?.auth);
   const userData = localStorage.getItem('user');
   const [user, setUser] = useState(null);
+  const [isRender, setRender] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -44,7 +45,8 @@ function AppLayout({ children }) {
       dispatch(setAuthenticatedUser(data));
       setUser(data);
     }
-    setUser(reduxState.authenticatedUser);
+    setRender(true);
+    //setUser(reduxState.authenticatedUser);
   }, [reduxState.authenticatedUser]);
 
   const renderHtml = (children) => {
@@ -77,7 +79,7 @@ function AppLayout({ children }) {
           : 'd-flex align-items-center justify-content-center h-100'}>
           <div className={user ? 'd-flex flex-row flex-column-fluid' : ''}>
             <ApolloProvider client={client}>
-              {renderHtml(children)}
+              {isRender && renderHtml(children)}
             </ApolloProvider>
           </div>
         </div>

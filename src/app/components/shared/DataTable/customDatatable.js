@@ -1,15 +1,19 @@
 // import { GetPermissionsByName } from '../../../hooks/usePermissionAcess';
-import { FilterMatchMode, FilterOperator } from 'primereact/api';
+import { debounce } from 'lodash';
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { Dropdown } from 'primereact/dropdown';
+import { IconField } from 'primereact/iconfield';
+import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
 import { Paginator } from 'primereact/paginator';
 import { Skeleton } from 'primereact/skeleton';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
+import { capitalizeFirstLetter } from '@/app/utilities/services/common.service';
+import { MultiSelect } from 'primereact/multiselect';
 import archive from '../../../assets/icons/ri_archive-fill.svg';
 
 const CustomDataTable = ({
@@ -31,61 +35,30 @@ const CustomDataTable = ({
   dataSortMode,
   onSort,
   isShowClientSidePaginator,
-  filterColums,
   onGlobalFilterChange,
   filterValue,
   sortOrder,
   sortField,
   isShowActionColumns,
   isShowClearAllFilter,
-  isShowViewAction,
-  isHideEditAction,
-  isHideArchieveAction,
   onView,
   onEdit,
   onArchive,
-  isShowPdfAction,
   clearFilterValue,
   onDownload,
   isShowCheckBox,
   onSelectionChange,
   selectedData,
-  isHideSearch,
   onDelete,
-  onRestore
+  onRestore,
+  filters,
+  setFilters
 }) => {
   const [dataSource, setDataSource] = useState([]);
   const [emptyMessage, setEmptyMessage] = useState('');
 
   let user = useSelector((state) => {
     return state.auth.user;
-  });
-
-  const [filters, setFilters] = useState({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    name: {
-      operator: FilterOperator.AND,
-      constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-    },
-    'country.name': {
-      operator: FilterOperator.AND,
-      constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-    },
-    representative: { value: null, matchMode: FilterMatchMode.IN },
-    date: {
-      operator: FilterOperator.AND,
-      constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
-    },
-    balance: {
-      operator: FilterOperator.AND,
-      constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-    },
-    status: {
-      operator: FilterOperator.OR,
-      constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-    },
-    activity: { value: null, matchMode: FilterMatchMode.BETWEEN },
-    verified: { value: null, matchMode: FilterMatchMode.EQUALS },
   });
 
   const permissionData = useSelector((state) => state.auth);
@@ -95,11 +68,6 @@ const CustomDataTable = ({
   useEffect(() => {
     setEmptyMessage('Loading...');
   }, []);
-
-  useEffect(() => {
-    if (filterColums && filterColums.length) {
-    }
-  }, filterColums);
 
   const bodyTemplate = (rowData, key, header) => {
     if (isLoading) {
@@ -120,7 +88,7 @@ const CustomDataTable = ({
   const actionBodyTemplate = (rowData) => {
     return (
       <div className={`d-flex  align-items-center`}>
-        {isShowPdfAction ? (
+        {onDownload ? (
           <div className='d-flex flex-row gap-2'>
 
             <button
@@ -147,7 +115,7 @@ const CustomDataTable = ({
           </div>
         ) : (
           <>
-            {isShowViewAction && (
+            {onView && (
               <button
                 className='btn btn-icon btn-xs me-1'
                 style={{ backgroundColor: '#FF6600' }}
@@ -158,7 +126,7 @@ const CustomDataTable = ({
                 <i className='pi pi-eye'></i>
               </button>
             )}
-            {!isHideEditAction && (
+            {onEdit && (
               <button
                 className='btn btn-icon me-1 btn-xs centered-button'
                 style={{ backgroundColor: '#FF6600' }}
@@ -172,7 +140,7 @@ const CustomDataTable = ({
             {
               (user?.operativeTypeEnum === 3 || user?.operativeTypeEnum === 4) ?
                 '' :
-                !isHideArchieveAction &&
+                onArchive &&
                 <button
                   data-toggle='tooltip'
                   title='Archive'
@@ -210,6 +178,30 @@ const CustomDataTable = ({
     );
   };
 
+  const debouncedSetFilters = useCallback(debounce(setFilters, 1000), [setFilters]);
+
+  const filterTemplate = (options, multiSelect = false, multiselectOptions = []) => {
+    let dataFilters = { ...filters };
+    if (dataFilters[options.field].value !== options.value) {
+      dataFilters[options.field].value = options.value;
+      debouncedSetFilters(dataFilters);
+    }
+
+    if (multiSelect) {
+      return <MultiSelect value={options.value} options={multiselectOptions} onChange={(e) => {
+        options.filterCallback(e.value)
+      }} optionLabel="name" optionValue='name' placeholder="Select" filter className="p-column-filter" />;
+    }
+    return (
+      <InputText
+        value={options.value}
+        onChange={(e) => options.filterApplyCallback(e.target.value)}
+        placeholder="Search"
+        className="p-column-filter"
+      />
+    );
+  };
+
   const setDynamicDataTableColumns = () => {
     if (columns && columns.length) {
       if (isShowActionColumns) {
@@ -238,6 +230,9 @@ const CustomDataTable = ({
               className={col.className}
               headerStyle={col.headerStyle}
               bodyStyle={col.bodyStyle}
+              filter={col.filter}
+              filterElement={(e) => filterTemplate(e, col?.multiSelect, col?.options)}
+              showFilterMatchModes={false}
             />
           );
         } else {
@@ -260,6 +255,9 @@ const CustomDataTable = ({
               className={col.className}
               headerStyle={col.headerStyle}
               bodyStyle={col.bodyStyle}
+              filter={col.filter}
+              filterElement={(e) => filterTemplate(e, col?.multiSelect, col?.options)}
+              showFilterMatchModes={false}
             />
           );
         }
@@ -334,39 +332,6 @@ const CustomDataTable = ({
     }
   };
 
-  const clearFilter = () => {
-    initFilters();
-  };
-
-  const initFilters = () => {
-    setFilters({
-      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      name: {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-      },
-      'country.name': {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-      },
-      representative: { value: null, matchMode: FilterMatchMode.IN },
-      date: {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
-      },
-      balance: {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-      },
-      status: {
-        operator: FilterOperator.OR,
-        constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-      },
-      activity: { value: null, matchMode: FilterMatchMode.BETWEEN },
-      verified: { value: null, matchMode: FilterMatchMode.EQUALS },
-    });
-  };
-
   const renderHeader = () => {
     return (
       <div className='flex justify-content-between'>
@@ -379,59 +344,75 @@ const CustomDataTable = ({
             onClick={clearFilter}
           />
         )}
-        {!isHideSearch && (
-          <div className='search-box-container mx-1 my-3'>
-            <span
-              className={filterValue ? 'p-input-icon-left ' : 'p-input-icon-left '}
-            >
-              {filterValue ? (
-                <i className='pi pi-times' onClick={clearFilterValue && clearFilterValue} />
-              ) : (
-                <i className='pi pi-search' />
-              )}
 
+        <div className='search-box-container mx-1 my-3'>
+          <span
+            className={filterValue ? 'p-input-icon-left ' : 'p-input-icon-left '}
+          >
+            {filterValue ? (
+              <i className='pi pi-times' onClick={clearFilterValue && clearFilterValue} />
+            ) : (
+              <i className='pi pi-search' />
+            )}
+            <IconField iconPosition="left">
+              <InputIcon className="pi pi-search"> </InputIcon>
               <InputText
                 value={filterValue}
                 onChange={onGlobalFilterChange}
                 placeholder='Search...'
                 className='ps-8'
               />
-            </span>
-          </div>
-        )}
+            </IconField>
+          </span>
+        </div>
       </div>
     );
   };
 
-  const header = renderHeader();
-
   return (
     <>
       <div className='commonTableDashboard'>
-        <DataTable
-          className={`${!scrollable ? 'p-datatable-responsive-commontabledetails' : ''} ${className || 'p-datatable-responsive'
-            }`}
-          dataKey={dataKey}
-          value={data}
-          onRowSelect={rowSelect}
-          //selectionMode={selectionMode}
-          header={header}
-          emptyMessage={isLoading ? 'Loading...' : 'No Records Found'}
-          scrollable={true}
-          scrollHeight={scrollHeight ? scrollHeight : '600px'}
-          sortMode={'single'}
-          onSort={onSort}
-          paginator={isShowClientSidePaginator}
-          sortOrder={sortOrder}
-          sortField={sortField}
-          selectionMode={isShowCheckBox ? null : 'checkbox'}
-          selection={selectedData}
-          onSelectionChange={onSelectionChange}
-        >
-          {setDynamicDataTableColumns()}
-        </DataTable>
+        <div className='row'>
+          <div className='col-lg-12'>
+            <div className='card'>
+              <div className='card-header'>
+                <div className='table-header justify-content-between'>
+                  <>{capitalizeFirstLetter(window.location.pathname.split('/')[1])} Table
+                  </>
+                  <div>
+                    {onGlobalFilterChange && renderHeader()}
+                  </div>
+                </div>
+              </div>
+              <div className='card-body'>
+                <DataTable
+                  className={`${!scrollable ? 'p-datatable-responsive-commontabledetails' : ''} ${className || 'p-datatable-responsive'
+                    }`}
+                  dataKey={dataKey}
+                  value={data}
+                  onRowSelect={rowSelect}
+                  //selectionMode={selectionMode}
+                  emptyMessage={isLoading ? 'Loading...' : 'No Records Found'}
+                  scrollable={true}
+                  scrollHeight={scrollHeight ? scrollHeight : '550px'}
+                  sortMode={'single'}
+                  onSort={onSort}
+                  paginator={isShowClientSidePaginator}
+                  sortOrder={sortOrder}
+                  sortField={sortField}
+                  selectionMode={isShowCheckBox ? null : 'checkbox'}
+                  selection={selectedData}
+                  onSelectionChange={onSelectionChange}
+                  filters={filters}
+                >
+                  {setDynamicDataTableColumns()}
+                </DataTable>
+                {showPaginator()}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      {showPaginator()}
     </>
   );
 };

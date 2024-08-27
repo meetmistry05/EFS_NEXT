@@ -1,5 +1,7 @@
+import { JobsPage } from "./jobPage";
+
 const Jobs = () => {
-    return <div>This is Jobs page</div>;
+    return <><JobsPage /></>;
 };
 
 export default Jobs;

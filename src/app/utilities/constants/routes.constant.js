@@ -25,7 +25,7 @@ export const REGISTER = '/auth/register';
 export const LOGOUT = '/logout';
 export const ERROR = '/error';
 export const JOBS = '/jobs';
-export const ADMINISTRATION_JOBS_CREATE = '/administration/jobs/create-job';
+export const ADMINISTRATION_JOBS_CREATE = '/jobs/add';
 export const ADMINISTRATION_JOBS_EDIT = '/administration/jobs/edit';
 export const OPERATIVE_PROFILE_OVERVIEW = '/operative/profile-overview/=id';
 export const VAULT_HOME = '/vault/home';

@@ -33,7 +33,7 @@ export const TopNav = () => {
         <>
             <div className='topNav bg-orange d-flex justify-content-end'>
                 <div className='p-3 text-end'>
-                    <div className="profile-pic-container d-flex align-items-center text-white" onClick={(e) => op.current.toggle(e)} style={{ cursor: 'pointer' }}>
+                    <div className="profile-pic-container d-flex align-items-center" onClick={(e) => op.current.toggle(e)} style={{ cursor: 'pointer' }}>
                         <Image
                             className="profile-pic"
                             src={require('./assets/img/default-profile-pic.jpg')}

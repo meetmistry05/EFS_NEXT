@@ -19,7 +19,7 @@ const CalendarView = ({ events }) => {
                 events={events}
                 startAccessor="start"
                 endAccessor="end"
-                style={{ height: 500 }}
+                style={{ height: 355 }}
                 onSelectEvent={handleSelectEvent}
                 view={view}
                 onView={(newView) => setView(newView)}

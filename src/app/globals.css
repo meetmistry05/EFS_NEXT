@@ -407,6 +407,14 @@ a {
   background-image: linear-gradient(195deg, var(--bs-teal), var(--bs-green));
 }
 
+.bg-gradient-gray {
+  background-image: linear-gradient(195deg, var(--bs-gray-500), #6f7a84);
+}
+
+.bg-gradient-danger {
+  background-image: linear-gradient(195deg, #d98d94, var(--bs-danger));
+}
+
 .shadow-dark {
   box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px rgba(64, 64, 64, .4) !important;
 }

@@ -35,19 +35,23 @@ function AppLayout({ children }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    let cookie = Cookies.get('token');
+    let data = userData ? JSON.parse(userData) : null;
+
     if (!reduxState.authenticatedUser) {
-      let cookie = Cookies.get('token');
-      let data = userData ? JSON.parse(userData) : null;
       if (!cookie && data) {
         localStorage.clear();
+        setUser(null);  // Clear the user state when there's no token
         return;
       }
       dispatch(setAuthenticatedUser(data));
       setUser(data);
+    } else {
+      setUser(reduxState.authenticatedUser);
     }
+
     setRender(true);
-    //setUser(reduxState.authenticatedUser);
-  }, [reduxState.authenticatedUser]);
+  }, [reduxState.authenticatedUser, userData]);
 
   const renderHtml = (children) => {
     return user ? (

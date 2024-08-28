@@ -31,27 +31,31 @@ export const TopNav = () => {
 
     return (
         <>
-            <div className='topNav bg-orange d-flex justify-content-end'>
-                <div className='p-3 text-end'>
-                    <div className="profile-pic-container d-flex align-items-center" onClick={(e) => op.current.toggle(e)} style={{ cursor: 'pointer' }}>
-                        <Image
-                            className="profile-pic"
-                            src={require('./assets/img/default-profile-pic.jpg')}
-                            alt='ProfilePic'
-                            height={50}
-                            width={50}
-                        />
-                        <div className='ms-2 fw-bolder fs-8'>Hi, {userData?.name ?? ""}</div>
-                        <i className='ms-1 pi pi-angle-down' />
+            <div className='card'>
+                <div className='card-body p-0'>
+                    <div className='topNav bg-white d-flex justify-content-end'>
+                        <div className='p-3 text-end'>
+                            <div className="profile-pic-container d-flex align-items-center" onClick={(e) => op.current.toggle(e)} style={{ cursor: 'pointer' }}>
+                                <Image
+                                    className="profile-pic"
+                                    src={require('./assets/img/default-profile-pic.jpg')}
+                                    alt='ProfilePic'
+                                    height={50}
+                                    width={50}
+                                />
+                                <div className='ms-2 fw-bolder fs-8'>Hi, {userData?.name ?? ""}</div>
+                                <i className='ms-1 pi pi-angle-down' />
+                            </div>
+                            <OverlayPanel ref={op} className='login-overlay'>
+                                <FormButton
+                                    className='fw-bold w-100'
+                                    text method={onLogout}
+                                    label='Sign Out'
+                                    severity="warning"
+                                />
+                            </OverlayPanel>
+                        </div>
                     </div>
-                    <OverlayPanel ref={op} className='login-overlay'>
-                        <FormButton
-                            className='fw-bold w-100'
-                            text method={onLogout}
-                            label='Sign Out'
-                            severity="warning"
-                        />
-                    </OverlayPanel>
                 </div>
             </div>
         </>

@@ -1,16 +1,15 @@
 "use client";
+import { setShowBuilding } from "@/redux/slices/building/building.slice";
 import { Button } from "primereact/button";
+import { Calendar } from "primereact/calendar";
 import { InputTextarea } from "primereact/inputtextarea";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import TextBoxComponent from "../components/shared/sharedUI/textBox.component";
-import { labelConstants } from "../utilities/constants/combine.constant";
-import DropdownList from "../components/shared/sharedUI/dropDownList.component";
+import BuildingAddEdit from "../buildings/buildingAddEditDialog";
 import BuildingDropdown from "../components/shared/Dropdowns/buildingsDropdown";
 import JobTypeDropdown from "../components/shared/Dropdowns/jobTypeDropdown";
-import { Calendar } from "primereact/calendar";
-import BuildingAddEdit from "../buildings/buildingAddEditDialog";
-import { setShowBuilding } from "@/redux/slices/building/building.slice";
+import TextBoxComponent from "../components/shared/sharedUI/textBox.component";
+import { labelConstants } from "../utilities/constants/combine.constant";
 
 
 export const JobAddEdit = ({ id = '' }) => {
@@ -28,12 +27,12 @@ export const JobAddEdit = ({ id = '' }) => {
     }, [reduxState?.error, reduxState?.isSuccess]);
 
     const addBuilding = () => {
-dispatch(setShowBuilding(true))
+        dispatch(setShowBuilding(true))
     }
 
     return (
         <>
-        <BuildingAddEdit />
+            <BuildingAddEdit />
             <div className="row">
                 <div className="col-lg-6">
                     <div className='card'>
@@ -63,7 +62,7 @@ dispatch(setShowBuilding(true))
                                 </div>
                                 <div className="col-lg-6 mb-3">
                                     <lable className="form-label required">Job Type</lable>
-                                    <JobTypeDropdown selectedJobType={null}/>
+                                    <JobTypeDropdown selectedJobType={null} />
                                 </div>
                                 <div className="col-lg-6 mb-3">
                                     <lable className="form-label required">Certificate Reference</lable>
@@ -129,11 +128,11 @@ dispatch(setShowBuilding(true))
                                     <BuildingDropdown selectedBuilding={selectedBuilding} onChange={setSelectedBuilding} />
                                 </div>
                                 <div className="col-lg-11 col-xl-3 text-end col-borer">
-                                    <Button 
-                                    type="button" 
-                                    className="btn btn-primary col-12" 
-                                    label="Add Building" 
-                                    onClick={addBuilding}/>
+                                    <Button
+                                        type="button"
+                                        className="btn btn-primary col-12"
+                                        label="Add Building"
+                                        onClick={addBuilding} />
                                 </div>
                             </div>
                         </div>

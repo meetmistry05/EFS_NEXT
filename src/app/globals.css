@@ -16,6 +16,14 @@ body {
    background: #e0e5eb !important;
 }
 
+:root {
+  font-family: "Poppins, Helvetica, " sans-serif"" !important;
+}
+
+.p-component {
+  font-family: "Poppins, Helvetica, " sans-serif"" !important;
+}
+
 ::-webkit-scrollbar {
   width: 12px;
 }
@@ -545,4 +553,9 @@ ul {
   color: white;
   border-color: transparent;
   background: transparent;
+}
+
+.btn:focus-visible,.btn-check:focus+.btn-primary,
+.btn-primary:focus {
+  box-shadow: none !important;
 }

@@ -199,7 +199,7 @@ const Dashboard = () => {
                 <div className="col-lg-10">
                     <div className="row align-items-center">
                         <div className="col-lg-12 mb-4">
-                            <div className="card mt-3">
+                            <div className="card">
                                 <div className="card-body dashboard-subcard">
                                     <CalendarView events={events} />
                                 </div>
